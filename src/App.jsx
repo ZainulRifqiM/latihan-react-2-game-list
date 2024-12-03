@@ -1,6 +1,7 @@
 import "./App.css";
 import { useState } from "react";
 import GameCard from "./components/gameCard";
+import { v4 as uuidv4 } from "uuid";
 
 function App() {
   const [games, setGames] = useState([
@@ -23,7 +24,68 @@ function App() {
       genre: "First-Person Shooter",
     },
   ]);
-  // console.log(games);
+
+  const [dataForm, setDataForm] = useState({
+    id: null,
+    name: "",
+    year: "",
+    genre: "",
+  });
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setDataForm((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
+
+  const handleSubmit = (e) => {
+    // e.prevantDefault();
+    e.preventDefault();
+
+    // validasi jika teks kososng
+    if (!dataForm.name || !dataForm.year || !dataForm.genre) {
+      alert("Data tidak boleh kosong");
+      return;
+    }
+
+    if (dataForm.id) {
+      setGames((prevGames) =>
+        prevGames.map((game) =>
+          game.id === dataForm.id ? { ...dataForm } : game
+        )
+      );
+    } else {
+      // tambah data ke state games
+      setGames((prevGames) => [
+        ...prevGames,
+        {
+          id: uuidv4(),
+          name: dataForm.name,
+          year: dataForm.year,
+          genre: dataForm.genre,
+        },
+      ]);
+      // setGames((prevGames) => [...prevGames, dataForm]);
+    }
+    // membersihkan form setelah submit
+    setDataForm({
+      id: null,
+      name: "",
+      year: "",
+      genre: "",
+    });
+  };
+
+  const handleEdit = (game) => {
+    setDataForm(game);
+    console.log(game);
+  };
+
+  const handleDelete = (id) => {
+    setGames((prevGames) => prevGames.filter((game) => game.id !== id));
+  };
 
   return (
     <div className="flex flex-col md:flex-row m-8 max-w-screen-2xl gap-8">
@@ -35,7 +97,11 @@ function App() {
           </p>
         </div>
 
-        <form action="" className="max-w-sm mx-auto space-y-2">
+        <form
+          action=""
+          onSubmit={handleSubmit}
+          className="max-w-sm mx-auto space-y-2"
+        >
           <div className="">
             <label
               htmlFor="name-input"
@@ -46,36 +112,45 @@ function App() {
             <input
               type="text"
               id="name-input"
+              onChange={handleChange}
+              value={dataForm.name}
+              name="name"
               placeholder="Tuliskan nama game anda..."
               className="border  text-sm rounded-lg  block w-full p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500"
             />
           </div>
           <div className="">
             <label
-              htmlFor="kategory-input"
+              htmlFor="year-input"
               className="block mb-2 text-sm font-medium text-gray-900 "
             >
-              Kategory Game
+              Tahun Rilis
             </label>
             <input
               type="text"
-              id="kategory-input"
-              placeholder="Tuliskan kategori game anda..."
+              id="year-input"
+              onChange={handleChange}
+              value={dataForm.year}
+              name="year"
+              placeholder="Tuliskan tahun rilis game..."
               className=" border  text-sm rounded-lg  block w-full p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500"
             />
           </div>
           <div>
             <label
-              htmlFor="desc-input"
+              htmlFor="genre-input"
               className="block mb-2 text-sm font-medium text-gray-900 "
             >
-              Deskripsi Game
+              Genre Game
             </label>
-            <textarea
+            <input
               type="text"
-              id="desc-input"
-              placeholder="Deskripsikan game anda..."
-              className="block w-full p-4  border  rounded-lg  text-base  bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500 resize-none h-40"
+              id="genre-input"
+              onChange={handleChange}
+              value={dataForm.genre}
+              name="genre"
+              placeholder="Tuliskan genre dari game anda..."
+              className=" border  text-sm rounded-lg  block w-full p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500"
             />
           </div>
           <button
@@ -92,7 +167,12 @@ function App() {
         </h1>
         <div className="grid md:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-4">
           {games.map((game) => (
-            <GameCard key={game.id} game={game} />
+            <GameCard
+              key={game.id}
+              game={game}
+              handleEdit={handleEdit}
+              handleDelete={handleDelete}
+            />
           ))}
         </div>
       </div>
