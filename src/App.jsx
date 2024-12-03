@@ -1,8 +1,30 @@
 import "./App.css";
-import { FaEdit } from "react-icons/fa";
-import { MdDeleteForever } from "react-icons/md";
+import { useState } from "react";
+import GameCard from "./components/gameCard";
 
 function App() {
+  const [games, setGames] = useState([
+    {
+      id: 1,
+      name: "Dota 2",
+      year: 2013,
+      genre: "Multiplayer Online Battle Arena",
+    },
+    {
+      id: 2,
+      name: "Dragon Nest",
+      year: 2010,
+      genre: "Action MMORPG",
+    },
+    {
+      id: 3,
+      name: "Valorant",
+      year: 2020,
+      genre: "First-Person Shooter",
+    },
+  ]);
+  // console.log(games);
+
   return (
     <div className="flex flex-col md:flex-row m-8 max-w-screen-2xl gap-8">
       <div className="space-y-8 p-4 md:p-8 md:w-2/5 border shadow rounded-lg">
@@ -69,23 +91,9 @@ function App() {
           Game List
         </h1>
         <div className="grid md:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-4">
-          <div className="border shadow rounded p-2 flex justify-between">
-            <div>
-              <h1 className="text-lg font-medium text-gray-900">Judul Film</h1>
-              <p className="text-xs font-light text-gray-400">kategori</p>
-              <p className="text-sm font-normal text-gray-600">
-                Deskripsi penjelasan film
-              </p>
-            </div>
-            <div className="flex flex-col gap-1">
-              <button className="w-12 border rounded-md bg-yellow-500 text-white text-xl">
-                <FaEdit className="mx-auto my-1" />
-              </button>
-              <button className="w-12  border rounded-md bg-red-500 text-white text-xl">
-                <MdDeleteForever className="mx-auto my-1" />
-              </button>
-            </div>
-          </div>
+          {games.map((game) => (
+            <GameCard key={game.id} game={game} />
+          ))}
         </div>
       </div>
     </div>
