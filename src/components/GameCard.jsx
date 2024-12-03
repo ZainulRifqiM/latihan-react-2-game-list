@@ -1,8 +1,8 @@
 import { FaEdit } from "react-icons/fa";
 import { MdDeleteForever } from "react-icons/md";
+import PropTypes from "prop-types";
 
 const GameCard = ({ game, handleEdit, handleDelete }) => {
-  console.log(game);
   const { id, name, year, genre } = game;
   return (
     <div className="border shadow rounded p-2 flex justify-between">
@@ -27,6 +27,18 @@ const GameCard = ({ game, handleEdit, handleDelete }) => {
       </div>
     </div>
   );
+};
+
+// Menambahkan validasi props
+GameCard.propTypes = {
+  game: PropTypes.shape({
+    id: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+    year: PropTypes.number.isRequired,
+    genre: PropTypes.string.isRequired,
+  }).isRequired,
+  handleEdit: PropTypes.func.isRequired,
+  handleDelete: PropTypes.func.isRequired,
 };
 
 export default GameCard;

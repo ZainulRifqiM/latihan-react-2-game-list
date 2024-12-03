@@ -6,19 +6,19 @@ import { v4 as uuidv4 } from "uuid";
 function App() {
   const [games, setGames] = useState([
     {
-      id: 1,
+      id: "1",
       name: "Dota 2",
       year: 2013,
       genre: "Multiplayer Online Battle Arena",
     },
     {
-      id: 2,
+      id: "2",
       name: "Dragon Nest",
       year: 2010,
       genre: "Action MMORPG",
     },
     {
-      id: 3,
+      id: "3",
       name: "Valorant",
       year: 2020,
       genre: "First-Person Shooter",
@@ -63,11 +63,10 @@ function App() {
         {
           id: uuidv4(),
           name: dataForm.name,
-          year: dataForm.year,
+          year: Number(dataForm.year),
           genre: dataForm.genre,
         },
       ]);
-      // setGames((prevGames) => [...prevGames, dataForm]);
     }
     // membersihkan form setelah submit
     setDataForm({
@@ -80,7 +79,6 @@ function App() {
 
   const handleEdit = (game) => {
     setDataForm(game);
-    console.log(game);
   };
 
   const handleDelete = (id) => {
